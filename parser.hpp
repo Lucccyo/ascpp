@@ -1,3 +1,6 @@
+#pragma once
+#include <vector>
+
 enum class TokenType {
   Integer,
   Plus,

@@ -1,5 +1,3 @@
-#include <string>
-#include <vector>
 #include <iostream>
 #include "parser.hpp"
 
@@ -21,7 +19,7 @@ std::vector<Token> lex(const std::string& input) {
       };
       std::cout << "new token int : " << n << '\n';
       tokens.push_back(Token {
-        TokenType::Integer, n
+        TokenType::Integer, std::move(n)
       });
       continue;
     };

@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include "sign.hpp"
+#include "parser.hpp"
 
 struct Int { int value; };
 struct Val { std::string name; };
@@ -20,5 +21,7 @@ using Expr = std::variant<
 
 struct Add { Expr left, right; };
 struct Neg { Expr expr; };
+
+Expr parse_expr(const std::vector<Token>& tokens);
 
 Sign sign_of_expr (const Expr& e);

@@ -8,6 +8,37 @@
 
 std::unordered_map<std::string, Sign> sign_table;
 
+Expr parse_factor(const std::vector<Token>& tokens, size_t& i) {
+  if (tokens[i].type == TokenType::Minus) {
+    i++;
+    Expr inner = parse_factor(tokens, i);
+    return Expr { std::make_unique<Neg>(Neg{std::move(inner)})};
+  }
+  if (tokens[i].type == TokenType::Integer) {
+    int value = std::stoi(tokens[i].text);
+    i++;
+    return Expr {Int {value}};
+  }
+  throw std::runtime_error("Unexpected token in factor");
+}
+
+Expr parse_expr(const std::vector<Token>& tokens) {
+  size_t i = 0;
+  Expr left = parse_factor(tokens, i);
+  while (i < tokens.size() && (tokens[i].type == TokenType::Plus || tokens[i].type == TokenType::Minus)) {
+    TokenType op = tokens[i].type;
+    i++;
+    Expr right = parse_factor(tokens, i);
+    if (op == TokenType::Plus) {
+      left = Expr { std::make_unique<Add>(Add{std::move(left), std::move(right)})};
+    }
+    if (op == TokenType::Minus) {
+      left = Expr{ std::make_unique<Add>(Add{ std::move(left), std::make_unique<Neg>(Neg{std::move(right)}) }) };
+    }
+  }
+  return left;
+}
+
 Sign sign_of_expr(const Expr& e) {
   if (std::holds_alternative<Int>(e)) {
     const Int& i = std::get<Int>(e);

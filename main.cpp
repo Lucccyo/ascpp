@@ -2,8 +2,8 @@
 #include "expr.hpp"
 
 int main() {
-  Expr e = std::make_unique<Add>(Add{ Expr{Int{5}}, std::make_unique<Neg>(Neg{ Expr{Int{5}} })});
-
+  std::string str = "0 + 0";
+  Expr e = parse_expr(lex(str));
   Sign sign = sign_of_expr(e);
   std::string s = to_string(sign);
   std::cout << s << "\n";

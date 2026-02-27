@@ -10,3 +10,11 @@ while (x = y) {
   x = x + 1
 }
 ```
+
+On définis un mini langage:
+
+expr ->
+  n : entier
+  v : variable
+  + : addition de deux entiers
+  - : negation d'un entier

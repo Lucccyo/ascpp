@@ -1,9 +1,11 @@
 #include <iostream>
-#include "sign.hpp"
+#include "expr.hpp"
 
 int main() {
-  // run_test();
-  std::string s = to_string(join(Sign::POS, Sign::NEG));
+  Expr e = std::make_unique<Add>(Add{ Expr{Int{5}}, std::make_unique<Neg>(Neg{ Expr{Int{5}} })});
+
+  Sign sign = sign_of_expr(e);
+  std::string s = to_string(sign);
   std::cout << s << "\n";
   return 0;
 };

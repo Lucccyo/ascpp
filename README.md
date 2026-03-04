@@ -3,28 +3,38 @@
 L'objectif de ce projet est de travailler l'[analyse statique](#analyse_statique)
 d'un programme en utilisant l'[interprétation_abstraite](#interpretation_abstraite)
 sur un [mini-langage](#mini_langage).
-La première étape fixée est de donner le signe d'une expression donnée en entrée.
-Par exemple, l'expression ci-dessous doit renvoyer `ZER`, pour zéro,
-car c'est une addition de deux zéros.
+L'objectif est de donner le signe abstrait minimal de chaque variable,
+à partir d'un programme donné en entrée.
+Le mini-langage est grandement inspiré du langage while introduit
+par Bernhard Reus dans [Limits of Computation](https://link.springer.com/book/10.1007/978-3-319-27889-6).
 
-```cpp
-0 + 0
-```
-
-La seconde étape est d'améliorer à la fois le mini-langage
-pour qu'il puisse prendre en compte davantage de structures,
-notamment des structures de flot de contrôle.
-Par exemple, l'expression ci-dessous doit renvoyer `x = POS` et `y = TOP`,
+Par exemple, le programme ci-dessous doit renvoyer `x = POS` et `y = TOP`,
 avec `POS` pour strictement positif et `TOP` pour entier,
 aussi bien positif que négatif, que nul.
 
 ```cpp
-x = 2
-y = -4
-while (x < 5) {
+x = 2;
+y = -4;
+while 5 > x do
   y = y + 1;
-  x = x + 1;
-}
+  x = x + 1
+```
+
+Le programme précédent a pour AST:
+```
+Seq = (
+  Seq = (
+    Assign = ( name = x, N = 2);
+    Assign = ( name = y, Neg = (N = 4))
+  );
+  While = (
+    Gt = (N = 5; Var = x);
+    Seq = (
+      Assign = ( name = y, Add = (Var = y; N = 1));
+      Assign = ( name = x, Add = (Var = x; N = 1))
+    )
+  )
+)
 ```
 
 ## Analyse statique
@@ -34,13 +44,26 @@ while (x < 5) {
 :warning: TODO
 
 ## Mini-langage
-Pour le moment, le mini-langage n'est constitué que d'entiers et d'additions,
-avec la grammaire suivante.
+Le mini-langage s'inspire du langage While.
+Ci-dessous la grammaire du langage utilisé ici.
 
 ```
-entier  n := int
-valeur  v := <name> e
-expr    e := n | v | add e e | neg e
+expression arithmétique
+a ::= n
+    | x
+    | a + a
+    | -a
+expression booléenne
+b ::= true
+    | false
+    | a > a
+    | a = a
+statement
+s ::= skip
+    | x = a
+    | s ; s
+    | if b then s else s
+    | while b do s
 ```
 
 ## Sources

@@ -3,9 +3,15 @@
 
 enum class TokenType {
   Integer,
-  Plus,
-  Minus,
-  End,
+  Plus, Minus,
+  Identifier,
+  True, False,
+  Greater_than, Equal,
+  If, Then, Else,
+  While, Do,
+  Semi_colon,
+  Skip,
+  End_of_file,
 };
 
 struct Token {

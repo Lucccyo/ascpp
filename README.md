@@ -1,41 +1,36 @@
 # ascpp
 
-L'objectif de ce projet est de travailler l'[analyse statique](#analyse_statique)
-d'un programme en utilisant l'[interprétation_abstraite](#interpretation_abstraite)
-sur un [mini-langage](#mini_langage).
-L'objectif est de donner le signe abstrait minimal de chaque variable,
-à partir d'un programme donné en entrée.
-Le mini-langage est grandement inspiré du langage while introduit
-par Bernhard Reus dans [Limits of Computation](https://link.springer.com/book/10.1007/978-3-319-27889-6).
+L'objectif de ce projet est de réaliser un analyseur statique
+pour le [mini-langage WHILE](#mini_langage) en utilisant
+l'[interprétation abstraite](#interpretation_abstraite).
 
-Par exemple, le programme ci-dessous doit renvoyer `x = POS` et `y = TOP`,
-avec `POS` pour strictement positif et `TOP` pour entier,
-aussi bien positif que négatif, que nul.
+L'analyseur calcule, pour chaque variable d'un programme,
+un intervalle abstrait sur-approximant l'ensemble des valeurs
+qu'elle peut prendre à la sortie du programme.
 
-```cpp
-x = 2;
-y = -4;
-while 5 > x do
-  y = y + 1;
-  x = x + 1
+Par exemple, le programme ci-dessous :
+
+```while
+n = n * n + 4;
+i = 1;
+while 10 > i do
+  if i > 5 then
+    n = n + 1
+  else
+    n = n + 2;
+  i = i + 1;
+x = 10 / n
 ```
 
-Le programme précédent a pour AST:
+avec `n` initialement inconnu (`TOP = (-∞, +∞)`), produit :
 ```
-Seq = (
-  Seq = (
-    Assign = ( name = x, N = 2);
-    Assign = ( name = y, Neg = (N = 4))
-  );
-  While = (
-    Gt = (N = 5; Var = x);
-    Seq = (
-      Assign = ( name = y, Add = (Var = y; N = 1));
-      Assign = ( name = x, Add = (Var = x; N = 1))
-    )
-  )
-)
+n -> [4; +inf)
+i -> [1; +inf)
 ```
+
+Puisque `n ∈ [4, +∞)` au point de division, l'analyseur prouve
+formellement que la division par `n` est toujours sûre,
+pour toutes les valeurs possibles de `n`.
 
 ## Analyse statique
 :warning: TODO

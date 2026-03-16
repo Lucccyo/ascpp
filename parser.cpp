@@ -6,7 +6,10 @@ std::vector<Token> lex(const std::string& input) {
   size_t i = 0;
   while (i < input.size()) {
     char c = input.at(i);
-    if (c == ' ') { i++; continue; }
+    if (c == ' ' || c == '\n' || c == '\t' || c == '\r') {
+      i++;
+      continue;
+    }
     if (std::isdigit(c)) {
       std::string n;
       while (i < input.size() && std::isdigit(input.at(i))) {
@@ -61,12 +64,20 @@ std::vector<Token> lex(const std::string& input) {
       continue;
     }
     switch (c) {
-      case '#': tokens.push_back(Token { TokenType::Skip, "#" }); break;
-      case '+': tokens.push_back(Token { TokenType::Plus, "+" }); break;
-      case '-': tokens.push_back(Token { TokenType::Minus, "-" }); break;
-      case '=': tokens.push_back(Token { TokenType::Equal, "=" }); break;
-      case '>': tokens.push_back(Token { TokenType::Greater_than, ">" }); break;
-      case ';': tokens.push_back(Token { TokenType::Semi_colon, ";" }); break;
+      case '#':
+      tokens.push_back(Token { TokenType::Skip, "#" }); break;
+      case '+':
+      tokens.push_back(Token { TokenType::Plus, "+" }); break;
+      case '*':
+      tokens.push_back(Token { TokenType::Mul, "*" }); break;
+      case '-':
+      tokens.push_back(Token { TokenType::Minus, "-" }); break;
+      case '=':
+      tokens.push_back(Token { TokenType::Equal, "=" }); break;
+      case '>':
+      tokens.push_back(Token { TokenType::Greater_than, ">" }); break;
+      case ';':
+      tokens.push_back(Token { TokenType::Semi_colon, ";" }); break;
       default:  throw std::runtime_error("Unexpected character"); break;
     }
     i++;

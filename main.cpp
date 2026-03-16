@@ -5,10 +5,21 @@
 #include "parser.hpp"
 
 int main() {
-  std::string str = "x = 2; y = -4; while x > 5 do y = y + 1; x = x + 1";
+  std::string str = R"(
+  n = n * n + 4;
+  i = 1;
+  while 10 > i do
+    if i > 5 then
+      n = n + 1
+    else
+      n = n + 2;
+    i = i + 1
+  )";
+  Store store = {{"n", TOP}};
   std::vector<Token> l = lex(str);
   std::cout << '\n';
-  Stmt stmt = g_parse_stmt(l);
-  std::cout << pp_stmt(stmt) << '\n';
+  Ast ast = g_parse_ast(l);
+  std::cout << pp_ast(ast) << '\n' << '\n';
+  std::cout << store_to_string(store_of_ast(store, ast)) << '\n';
   return 0;
 };

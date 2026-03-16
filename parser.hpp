@@ -3,7 +3,7 @@
 
 enum class TokenType {
   Integer,
-  Plus, Minus,
+  Plus, Minus, Mul,
   Identifier,
   True, False,
   Greater_than, Equal,
